@@ -52,12 +52,11 @@ const shoes = [
 ];
 
 app.get('/shoes', (req, res) => {
-    const minPrice = req.query['min-price'];
-    const maxPrice = req.query['max-price'];
+    const minPrice = req.query['min-price'] === undefined ? 0 : req.query['min-price'];
+    const maxPrice = req.query['max-price'] === undefined ? 10000 : req.query['max-price'];
     // we can use a quirk of JS: calling new RegExp(undefined) returns /(?:)/
     const type = new RegExp(req.query.type);
     res.send(shoes.filter((s) => {
-        return s.price >= (minPrice === undefined ? 0 : minPrice) && s.price <= (maxPrice === undefined ? 10000 : maxPrice) && s.type.match(type);
+        return s.price >= minPrice && s.price <= maxPrice && s.type.match(type);
     }));
-
 });
